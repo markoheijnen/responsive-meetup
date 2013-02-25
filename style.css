@@ -1,0 +1,68 @@
+/* 
+Theme Name: Responsive for WordPress meetups
+Theme URI: http://themeid.com/responsive-theme/ 
+Description: Responsive Theme Meetups is a flexible foundation with fluid grid system that adapts your website to mobile devices and the desktop or any other viewing environment. Theme features 9 Page Templates, 11 Widget Areas, 6 Template Layouts, 4 Menu Positions and more. Powerful but simple Theme Options for full CMS control with easy Logo Upload, Social Networking and Webmaster Tools etc. Responsive is WooCommerce Compatible, Multilingual Ready (WPML), RTL-Language Support, Retina-Ready, W3C Markup Validated and currently translated into 40 languages. Cross-Browser compatible and yes even the IE7. No paid memberships or clubs to get a FREE/Responsive Support you need. http://themeid.com/support/
+
+Version: 1.0
+Author: markoheijnen 
+Author URI: http://markoheijnen.com
+Tags: white, black, gray, light, custom-menu, custom-header, custom-background, one-column, two-columns, left-sidebar, right-sidebar, flexible-width, theme-options, threaded-comments, full-width-template, sticky-post, translation-ready, flexible-width, rtl-language-support
+
+Template: responsive
+
+License: GNU General Public License v3 or later
+License URI: license.txt 
+
+Responsive WordPress Theme Meetups, Copyright (C) 2003-2012 Emil Uzelac 
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+CSS Rules: Sorted alphabetically.
+*/
+
+#logo-image {
+	display: inline-block;
+}
+
+.has-image .site-name {
+	display: inline-block;
+}
+
+.menu-horizontal {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.menu-horizontal li {
+	display: inline-block;
+	margin: 0 2em 0 0;
+}
+
+.menu-horizontal li a {
+	border-bottom: 0;
+	color: #6A6A6A;
+	display: inline-block;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.menu-horizontal li.selected a {
+	font-weight: bold;
+}
+
+@media screen and (max-width: 650px) {
+	.has-image .site-name {
+	}
+}
