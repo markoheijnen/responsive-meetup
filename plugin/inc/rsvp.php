@@ -183,7 +183,7 @@ class Responsive_Meetups_RSVP {
 			update_post_meta( $rsvp_id, 'user_id', get_current_user_id() );
 
 		$title   = sprintf( __( 'RSVP for: %s', 'responsive_meetups' ), get_the_title( $event_id ) );
-		$message = sprintf( __( 'Dear %s.', 'responsive_meetups' ), $name ) . "\r\n\r\n";
+		$message = sprintf( __( 'Dear %s,', 'responsive_meetups' ), $name ) . "\r\n\r\n";
 
 		if( 'waitinglist' == $type )
 			$message .= sprintf( __( 'You are on the waitinglist for "%s".', 'responsive_meetups' ), get_the_title( $event_id ) ) . "\r\n";

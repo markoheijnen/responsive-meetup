@@ -96,7 +96,7 @@ class Responsive_Meetups_Events {
 			'update_item'                => __( 'Update type', 'responsive_meetups' ),
 			'add_new_item'               => __( 'Add new type', 'responsive_meetups' ),
 			'new_item_name'              => __( 'New type name', 'responsive_meetups' ),
-			'separate_items_with_commas' => __( 'Separate typess with commas' ),
+			'separate_items_with_commas' => __( 'Separate types with commas' ),
 			'add_or_remove_items'        => __( 'Add or remove types' ),
 			'choose_from_most_used'      => __( 'Choose from the most used types' ),
 			'menu_name'                  => __( 'Type', 'responsive_meetups' )
