@@ -9,6 +9,7 @@ class Responsive_Meetups_RSVP {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_post_type' ) );
+		add_action( 'init', array( $this, 'register_post_statuses' ) );
 
 		self::$post_statuses = array(
 			'attend'      => __( 'Attend', 'responsive_meetups' ),
@@ -30,6 +31,48 @@ class Responsive_Meetups_RSVP {
 		);
 
 		register_post_type( 'rsvp', $args );
+	}
+
+	public function register_post_statuses() {
+		$args = array(
+			'label'                     => __( 'Attend', 'responsive_meetups' ),
+			'label_count'               => _n_noop( 'Attendee (%s)',  'Attendees (%s)', 'responsive_meetups' ),
+			'public'                    => true,
+			'show_in_admin_all_list'    => true,
+			'show_in_admin_status_list' => true,
+			'exclude_from_search'       => false,
+		);
+		register_post_status( 'attend', $args );
+
+		$args = array(
+			'label'                     => __( 'Attendee', 'responsive_meetups' ),
+			'label_count'               => _n_noop( 'Attendee (%s)',  'Attendees (%s)', 'responsive_meetups' ),
+			'public'                    => true,
+			'show_in_admin_all_list'    => true,
+			'show_in_admin_status_list' => true,
+			'exclude_from_search'       => false,
+		);
+		register_post_status( 'attend', $args );
+
+		$args = array(
+			'label'                     => __( 'Non attendee', 'responsive_meetups' ),
+			'label_count'               => _n_noop( 'Non attendee (%s)',  'Non attendees (%s)', 'responsive_meetups' ),
+			'public'                    => true,
+			'show_in_admin_all_list'    => true,
+			'show_in_admin_status_list' => true,
+			'exclude_from_search'       => false,
+		);
+		register_post_status( 'notattend', $args );
+
+		$args = array(
+			'label'                     => __( 'Waiting list', 'responsive_meetups' ),
+			'label_count'               => __( 'Waiting list (%s)', 'responsive_meetups' ),
+			'public'                    => true,
+			'show_in_admin_all_list'    => true,
+			'show_in_admin_status_list' => true,
+			'exclude_from_search'       => false,
+		);
+		register_post_status( 'waitinglist', $args );
 	}
 
 	public static function is_rsvp( $event_id ) {
@@ -85,10 +128,6 @@ class Responsive_Meetups_RSVP {
 	public function do_rsvp( $event_id, $name, $email, $comment = '', $type = '' ) {
 		$errors = new WP_Error();
 
-		if( ! isset( self::$post_statuses[ $type ] ) )
-			$type = 'attend';
-
-
 		if( empty( $name ) )
 			$errors->add( 'empty_name', __( 'Please enter your name.' ) );
 
@@ -118,6 +157,15 @@ class Responsive_Meetups_RSVP {
 		if ( $errors->get_error_codes() )
 			return $errors;
 
+		$spots = absint( get_post_meta( $event_id, 'spots', true ) );
+		$count = Responsive_Meetups_RSVP::counts( $event_id );
+
+		if( ! isset( self::$post_statuses[ $type ] ) )
+			$type = 'attend';
+
+		if( 'attend' == $type && $count->attend >= $spots )
+			$type = 'waitinglist';
+
 
 		$args = array(
 			'post_title'  => $name,
@@ -133,6 +181,23 @@ class Responsive_Meetups_RSVP {
 
 		if( is_user_logged_in() )
 			update_post_meta( $rsvp_id, 'user_id', get_current_user_id() );
+
+		$title   = sprintf( __( 'RSVP for: %s', 'responsive_meetups' ), get_the_title( $event_id ) );
+		$message = sprintf( __( 'Dear %s.', 'responsive_meetups' ), $name ) . "\r\n\r\n";
+
+		if( 'waitinglist' == $type )
+			$message .= sprintf( __( 'You are on the waitinglist for "%s".', 'responsive_meetups' ), get_the_title( $event_id ) ) . "\r\n";
+		if( 'notattend' == $type )
+			$message .= sprintf( __( 'You just registered to not attend the event: %s.', 'responsive_meetups' ), get_the_title( $event_id ) ) . "\r\n";
+		else
+			$message .= sprintf( __( 'You just registered to attend the event: %s.', 'responsive_meetups' ), get_the_title( $event_id ) ) . "\r\n";
+
+		$title = apply_filters( 'retrieve_password_title', $title, $event_id );
+		$message = apply_filters( 'retrieve_password_message', $message, $event_id );
+
+		wp_mail( $email, $title, $message );
+
+		wp_cache_delete( 'rsvp', 'counts_parent_' . $event_id  );
 
 		return true;
 	}
@@ -179,14 +244,14 @@ class Responsive_Meetups_RSVP {
 		$count = $wpdb->get_results( $wpdb->prepare( $query, $parent_id ), ARRAY_A );
 
 		$stats = array();
-		foreach ( self::$post_statuses as $state )
+		foreach ( self::$post_statuses as $state => $lable )
 			$stats[ $state ] = 0;
 
 		foreach ( (array) $count as $row )
 			$stats[ $row['post_status'] ] = $row['num_posts'];
 
 		$stats = (object) $stats;
-		wp_cache_set( $cache_key, $stats, 'counts_parent_' . $parent_id  );
+		wp_cache_set( $cache_key, $stats, 'counts_parent_' . $parent_id );
 
 		return $stats;
 	}

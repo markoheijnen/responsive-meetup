@@ -1,6 +1,7 @@
 <?php
 
 function rsvp_registration_form() {
+	$event_id = get_the_ID();
 	$result = $user_id = false;
 	$name = $email = $comment = $protected = '';
 
@@ -28,12 +29,15 @@ function rsvp_registration_form() {
 	$html = '<h1>' . __( 'Registration' ) . '</h1>';
 
 	if( is_wp_error( $result ) ) {
-		echo '<ul class="error">';
+		echo '<ul class="info-box alert">';
 
 		foreach ( $result->get_error_messages() as $err )
 			echo '<li>' . $err . '</li>';
 
 		echo '</ul>';
+	}
+	else if( true == $result ) {
+		$html .= '<div class="info-box success">' . __( 'You just registered for this event.', 'responsive_meetups' ) . '</div>';
 	}
 
 	$html .= '<form action="' . get_permalink() . 'rsvp/" method="post">';
