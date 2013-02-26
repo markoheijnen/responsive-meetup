@@ -62,6 +62,10 @@ CSS Rules: Sorted alphabetically.
 	font-weight: bold;
 }
 
+ul.info-box {
+	list-style: none;
+}
+
 @media screen and (max-width: 650px) {
 	.has-image .site-name {
 	}
