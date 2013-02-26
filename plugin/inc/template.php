@@ -26,7 +26,14 @@ function rsvp_registration_form() {
 	}
 
 
-	$html = '<h1>' . __( 'Registration' ) . '</h1>';
+	$html = '<h1>' . sprintf( __( 'Registration for %s' ), get_the_title( $event_id ) ) . '</h1>';
+
+	$timestamp = get_post_meta( get_the_ID(), 'datetime_event', true );
+	$html .= sprintf( '<p><time datetime="%1$s">%2$s<br/>%3$s</time></p>',
+		esc_attr( date( 'c', $timestamp ) ),
+		esc_html( date_i18n( get_option('date_format'), $timestamp ) ),
+		esc_html( date_i18n( get_option('time_format'), $timestamp ) )
+	);
 
 	if( true == $result ) {
 		$html .= '<div class="info-box success">' . __( 'You just registered for this event.', 'responsive_meetups' ) . '</div>';
