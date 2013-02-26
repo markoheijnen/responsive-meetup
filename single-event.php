@@ -40,7 +40,7 @@ if ( ! defined('ABSPATH') ) exit;
 					<?php if ( comments_open() ) : ?>
 						<span class="comments-link">
 						<span class="mdash">&mdash;</span>
-					<?php comments_popup_link(__('No Comments &darr;', 'responsive'), __('1 Comment &darr;', 'responsive'), __('% Comments &darr;', 'responsive')); ?>
+					<?php comments_popup_link(__('No Comments &darr;', 'responsive_meetups'), __('1 Comment &darr;', 'responsive_meetups'), __('% Comments &darr;', 'responsive_meetups')); ?>
 						</span>
 					<?php endif; ?> 
 				</div><!-- end of .post-meta -->
@@ -51,8 +51,8 @@ if ( ! defined('ABSPATH') ) exit;
 				</address>
 
 				<div class="post-entry">
-					<?php the_content(__('Read more &#8250;', 'responsive')); ?>
-					<?php wp_link_pages(array('before' => '<div class="pagination">' . __( 'Pages:', 'responsive' ), 'after' => '</div>')); ?>
+					<?php the_content(__('Read more &#8250;', 'responsive_meetups')); ?>
+					<?php wp_link_pages(array('before' => '<div class="pagination">' . __( 'Pages:', 'responsive_meetups' ), 'after' => '</div>')); ?>
 				</div><!-- end of .post-entry -->
 
 				<div class="navigation">
@@ -60,15 +60,15 @@ if ( ! defined('ABSPATH') ) exit;
 					<div class="next"><?php next_post_link( '%link &#8250;' ); ?></div>
 				</div><!-- end of .navigation -->
 
-				<div class="post-edit"><?php edit_post_link(__('Edit', 'responsive')); ?></div>             
+				<div class="post-edit"><?php edit_post_link(__('Edit', 'responsive_meetups')); ?></div>             
 			</div><!-- end of #post-<?php the_ID(); ?> -->
 
 			<?php comments_template( '', true ); ?>
 
 			<?php if (  $wp_query->max_num_pages > 1 ) : ?>
 			<div class="navigation">
-				<div class="previous"><?php next_posts_link( __( '&#8249; Older posts', 'responsive' ) ); ?></div>
-				<div class="next"><?php previous_posts_link( __( 'Newer posts &#8250;', 'responsive' ) ); ?></div>
+				<div class="previous"><?php next_posts_link( __( '&#8249; Older posts', 'responsive_meetups' ) ); ?></div>
+				<div class="next"><?php previous_posts_link( __( 'Newer posts &#8250;', 'responsive_meetups' ) ); ?></div>
 			</div><!-- end of .navigation -->
 			<?php endif; ?>
 
@@ -108,14 +108,79 @@ if ( ! defined('ABSPATH') ) exit;
 						</ul>
 					<?php } ?>
 				</div><!-- end of .widget-wrapper -->
+
+				<?php
+				$args = array(
+					'post_type'      => 'rsvp',
+					'post_status'    => 'attend',
+					'post_parent'    => get_the_ID(),
+					'posts_per_page' => -1,
+					'order'          => 'asc',
+					'fields'         => 'ids'
+				);
+				$rsvps = get_posts( $args );
+				if( count( $rsvps ) > 0 ) {
+				?>
+				<div class="widget-wrapper rsvp-images">
+					<h4><?php _e( 'Attendees', 'responsive_meetups' ); ?></h4>
+					<ul>
+						<?php foreach( $rsvps as $rsvp ) { ?>
+						<li><?php echo get_avatar( get_post_meta( $rsvp, 'email', true ), 72, false, get_post_meta( $rsvp, 'name', true ) ); ?></li>
+
+						<?php } ?>
+					</ul>
+
+					<?php
+					$args = array(
+						'post_type'      => 'rsvp',
+						'post_status'    => 'waitinglist',
+						'post_parent'    => get_the_ID(),
+						'posts_per_page' => -1,
+						'order'          => 'asc',
+						'fields'         => 'ids'
+					);
+					$rsvps = get_posts( $args );
+
+					if( count( $rsvps ) > 0 ) { ?>
+					<h4><?php _e( 'Waitinglist', 'responsive_meetups' ); ?></h4>
+					<ul>
+						<?php foreach( $rsvps as $rsvp ) { ?>
+						<li><?php echo get_avatar( get_post_meta( $rsvp, 'email', true ), 72, false, get_post_meta( $rsvp, 'name', true ) ); ?></li>
+
+						<?php } ?>
+					</ul>
+					<?php }
+
+					$args = array(
+						'post_type'      => 'rsvp',
+						'post_status'    => 'notattend',
+						'post_parent'    => get_the_ID(),
+						'posts_per_page' => -1,
+						'order'          => 'asc',
+						'fields'         => 'ids'
+					);
+					$rsvps = get_posts( $args );
+
+					if( count( $rsvps ) > 0 ) { ?>
+					<h4><?php _e( 'Not Attendees', 'responsive_meetups' ); ?></h4>
+					<ul>
+						<?php foreach( $rsvps as $rsvp ) { ?>
+						<li><?php echo get_avatar( get_post_meta( $rsvp, 'email', true ), 72, false, get_post_meta( $rsvp, 'name', true ) ); ?></li>
+
+						<?php } ?>
+					</ul>
+					<?php } ?>
+
+				</div>
+				<?php } ?>
 			</div>
 
 		<?php endwhile; ?> 
 
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
 		<div class="navigation">
-			<div class="previous"><?php next_posts_link( __( '&#8249; Older posts', 'responsive' ) ); ?></div>
-			<div class="next"><?php previous_posts_link( __( 'Newer posts &#8250;', 'responsive' ) ); ?></div>
+			<div class="previous"><?php next_posts_link( __( '&#8249; Older posts', 'responsive_meetups' ) ); ?></div>
+			<div class="next"><?php previous_posts_link( __( 'Newer posts &#8250;', 'responsive_meetups' ) ); ?></div>
 		</div><!-- end of .navigation -->
 		<?php endif; ?>
 
@@ -123,7 +188,7 @@ if ( ! defined('ABSPATH') ) exit;
 
 		<h2><?php _e( 'No events are planned', 'responsive_meetups' ); ?></h2>
 
-		<p><?php _e( 'Don&#39;t panic, we&#39;ll get through this together. Let&#39;s explore our options here.', 'responsive' ); ?></p>
+		<p><?php _e( 'Don&#39;t panic, we&#39;ll get through this together. Let&#39;s explore our options here.', 'responsive_meetups' ); ?></p>
 
 		<?php endif; ?>
 
