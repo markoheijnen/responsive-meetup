@@ -143,7 +143,7 @@ class Responsive_Meetups_RSVP {
 				'meta_query'  => array(
 					array(
 						'key'   => 'email',
-						'value' => $user->user_email
+						'value' => $email
 					)
 				)
 			);
