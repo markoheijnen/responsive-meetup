@@ -28,37 +28,39 @@ function rsvp_registration_form() {
 
 	$html = '<h1>' . __( 'Registration' ) . '</h1>';
 
-	if( is_wp_error( $result ) ) {
-		echo '<ul class="info-box alert">';
-
-		foreach ( $result->get_error_messages() as $err )
-			echo '<li>' . $err . '</li>';
-
-		echo '</ul>';
-	}
-	else if( true == $result ) {
+	if( true == $result ) {
 		$html .= '<div class="info-box success">' . __( 'You just registered for this event.', 'responsive_meetups' ) . '</div>';
 	}
+	else {
+		if( is_wp_error( $result ) ) {
+			echo '<ul class="info-box alert">';
 
-	$html .= '<form action="' . get_permalink() . 'rsvp/" method="post">';
-	$html .= '<div>';
-	$html .= '<label for="rsvp_name">' . __( 'Name', 'responsive_meetups' ) . '<span class="required">*</span></label>';
-	$html .= '<div><input name="rsvp_name" id="rsvp_name" type="text" value="' . esc_attr( $name ) . '" class="medium"' . $protected . ' /></div>';
-	$html .= '</div>';
+			foreach ( $result->get_error_messages() as $err )
+				echo '<li>' . $err . '</li>';
 
-	$html .= '<div>';
-	$html .= '<label for="rsvp_email">' . __( 'E-mail', 'responsive_meetups' ) . '<span class="required">*</span></label>';
-	$html .= '<div><input name="rsvp_email" id="rsvp_email" type="email" value="' . esc_attr( $email ) . '" class="medium"' . $protected . ' /></div>';
-	$html .= '</div>';
+			echo '</ul>';
+		}
 
-	$html .= '<div>';
-	$html .= '<label for="rsvp_comment">' . __( 'Comment', 'responsive_meetups' ) . '</label>';
-	$html .= '<div><textarea name="rsvp_comment" id="rsvp_comment" class="medium">' . esc_attr( $comment ) . '</textarea></div>';
-	$html .= '</div>';
+		$html .= '<form action="' . get_permalink() . 'rsvp/" method="post">';
+		$html .= '<div>';
+		$html .= '<label for="rsvp_name">' . __( 'Name', 'responsive_meetups' ) . '<span class="required">*</span></label>';
+		$html .= '<div><input name="rsvp_name" id="rsvp_name" type="text" value="' . esc_attr( $name ) . '" class="medium"' . $protected . ' /></div>';
+		$html .= '</div>';
 
-	$html .= '<input type="submit" name="submit" value="' . __( 'Submit' ) . '" />';
+		$html .= '<div>';
+		$html .= '<label for="rsvp_email">' . __( 'E-mail', 'responsive_meetups' ) . '<span class="required">*</span></label>';
+		$html .= '<div><input name="rsvp_email" id="rsvp_email" type="email" value="' . esc_attr( $email ) . '" class="medium"' . $protected . ' /></div>';
+		$html .= '</div>';
 
-	$html .= '</form>';
+		$html .= '<div>';
+		$html .= '<label for="rsvp_comment">' . __( 'Comment', 'responsive_meetups' ) . '</label>';
+		$html .= '<div><textarea name="rsvp_comment" id="rsvp_comment" class="medium">' . esc_attr( $comment ) . '</textarea></div>';
+		$html .= '</div>';
+
+		$html .= '<input type="submit" name="submit" value="' . __( 'Submit' ) . '" />';
+
+		$html .= '</form>';
+	}
 
 	echo $html;
 }
