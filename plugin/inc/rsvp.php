@@ -11,6 +11,9 @@ class Responsive_Meetups_RSVP {
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'init', array( $this, 'register_post_statuses' ) );
 
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
+		add_action( 'save', array( $this, 'add_meta_boxes_save' ) );
+
 		self::$post_statuses = array(
 			'attend'      => __( 'Attend', 'responsive_meetups' ),
 			'notattend'   => __( 'Not attend', 'responsive_meetups' ),
@@ -74,6 +77,56 @@ class Responsive_Meetups_RSVP {
 		);
 		register_post_status( 'waitinglist', $args );
 	}
+
+
+	public function add_meta_boxes() {
+		add_meta_box(
+			'event_rsvp',
+			__( "RSVP's", 'responsive_meetups' ),
+			array( &$this, 'meta_box_event_rsvps' ),
+			'event',
+			'advanced',
+			'high'
+		);
+	}
+
+	public function meta_box_event_rsvps( $post ) {
+		$args = array(
+			'post_type'     => 'rsvp',
+			'post_status'   => 'null',
+			'post_parent'   => $post->ID,
+			'post_per_page' => -1
+		);
+		$rsvps = get_posts( $args );
+
+		echo '<table>';
+
+		echo '<thead>';
+			echo '<tr>';
+			echo '<td>' . __( 'Name', 'responsive_meetups' ) . '</td>';
+			echo '<td>' . __( 'E-mail', 'responsive_meetups' ) . '</td>';
+			echo '<td>' . __( 'Comment', 'responsive_meetups' ) . '</td>';
+			echo '</tr>';
+		echo '<thead>';
+
+		echo '<tbody>';
+		foreach( $rsvps as $rsvp ) {
+			echo '<tr>';
+			echo '<td>' . get_post_meta( $rsvp->ID, 'name', true ) . '</td>';
+			echo '<td>' . get_post_meta( $rsvp->ID, 'email', true ) . '</td>';
+			echo '<td>' . get_post_meta( $rsvp->ID, 'comment', true ) . '</td>';
+			echo '</tr>';
+		}
+		echo '</tbody>';
+
+		echo '</table>';
+	}
+
+	public function add_meta_boxes_save( $post_id ) {
+
+	}
+
+
 
 	public static function is_rsvp( $event_id ) {
 		$is_rsvp = false;
