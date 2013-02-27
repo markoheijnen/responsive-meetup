@@ -38,7 +38,8 @@ if( ! defined( 'CMB_PATH' ) )
 	define( 'CMB_PATH', dirname( __FILE__ ) );
 
 if( ! defined( 'CMB_URL' ) )
-	define( 'CMB_URL', str_replace( WP_CONTENT_DIR, content_url(), CMB_PATH ) );
+	define( 'CMB_URL', str_replace( str_replace( '\\', '/', WP_CONTENT_DIR ), str_replace( '\\', '/', content_url() ), CMB_PATH ) );
+
 
 include_once( CMB_PATH . '/classes.fields.php' );
 include_once( CMB_PATH . '/class.cmb-meta-box.php' );
