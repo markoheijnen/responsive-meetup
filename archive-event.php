@@ -85,11 +85,11 @@ if ( ! defined('ABSPATH') ) exit;
 								?>
 							</li>
 							<li>
-								<?php printf( _n( '%s attending', '%s attending', $count->attend ), $count->attend, 'responsive_meetups' ); ?>
+								<?php printf( _n( '%s attending', '%s attending', $count->attend, 'responsive_meetups' ), $count->attend ); ?>
 							</li>
 							<?php if( $count->waitinglist ) { ?>
 							<li>
-								<?php printf( _n( '%s waiting', '%s waiting', $count->waitinglist ), $count->waitinglist, 'responsive_meetups' ); ?>
+								<?php printf( _n( '%s waiting', '%s waiting', $count->waitinglist, 'responsive_meetups' ), $count->waitinglist ); ?>
 							</li>
 							<?php } ?>
 							<?php if( comments_open() ) { ?>
